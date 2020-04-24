@@ -1,0 +1,68 @@
+version: '3'
+
+services:
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus/memory_over.yml:/etc/prometheus/memory_over.yml:ro
+      - ./prometheus/server_down.yml:/etc/prometheus/server_down.yml:ro
+    ports:
+      - 9898:9090
+    restart: always
+
+  cadvisor:
+    image: google/cadvisor:latest
+    container_name: cadvisor
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    ports:
+      - 9080:8080
+    restart: always
+
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - 6379:6379
+    restart: always
+
+  redis_exporter:
+    image: oliver006/redis_exporter
+    container_name: redis_exporter
+    command:
+      - '--redis.addr=redis://redis:6379'
+      - '--redis.password='
+    ports:
+      - 9121:9121
+    restart: always
+
+  mysql_exporter:
+    image: prom/mysqld-exporter
+    container_name: mysql_exporter
+    environment:
+      - DATA_SOURCE_NAME=root:root@(172.24.202.120:3306)/
+    ports:
+      - 9104:9104
+    restart: always
+
+  alertmanager:
+    image: prom/alertmanager
+    container_name: alertmanager
+    volumes:
+      - ./prometheus/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+    ports:
+      - 9093:9093
+    restart: always
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - 3000:3000
+    restart: always

@@ -1,0 +1,55 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+# 告警服务器
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ["alertmanager:9093"]
+
+# 告警规则
+rule_files:
+  - 'memory_over.yml'
+  - 'server_down.yml'
+
+scrape_configs:
+
+  # 监控 prometheus
+  - job_name: 'prometheus'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['prometheus:9090']
+        labels:
+          instance: 'prometheus'
+
+  # 监控 docker
+  - job_name: 'cadvisor'
+    static_configs:
+      - targets: ['cadvisor:8080']
+        labels:
+          instance: 'cadvisor'
+
+  # 监控 redis
+  - job_name: 'redis_exporter'
+    static_configs:
+      - targets: ['redis_exporter:9121']
+        labels:
+          instance: 'redis_exporter'
+
+  # 监控 mysql
+  - job_name: 'mysql_exporter'
+    static_configs:
+      - targets: ['mysql_exporter:9104']
+        labels:
+          instance: 'mysql_exporter'
+
+  # 监控springboot应用
+  - job_name: 'springboot2-micrometer-prometheus-grafana'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 5s
+    static_configs:
+      # 应用服务器地址
+      - targets: ['172.24.202.120:8080']
+        labels:
+          instance: 'springboot2-micrometer-prometheus-grafana'

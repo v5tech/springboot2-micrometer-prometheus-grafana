@@ -1,0 +1,19 @@
+global:
+  smtp_smarthost: 'smtp.exmail.qq.com:465'
+  smtp_from: 'fengj@anchnet.com'
+  smtp_auth_username: 'fengj@anchnet.com'
+  smtp_auth_password: 'xxxxx'
+  smtp_require_tls: false
+
+route:
+  group_by: ['alertname']
+  group_wait: 10s
+  group_interval: 5m
+  repeat_interval: 5m
+  receiver: 'mail-receiver'
+
+receivers:
+  - name: 'mail-receiver'
+    email_configs:
+      - to: 'fengj@anchnet.com'
+        send_resolved: true
