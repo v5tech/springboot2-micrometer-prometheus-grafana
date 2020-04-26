@@ -6,9 +6,9 @@ services:
     image: prom/prometheus
     container_name: prometheus
     volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
-      - ./prometheus/memory_over.yml:/etc/prometheus/memory_over.yml:ro
-      - ./prometheus/server_down.yml:/etc/prometheus/server_down.yml:ro
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./memory_over.yml:/etc/prometheus/memory_over.yml:ro
+      - ./server_down.yml:/etc/prometheus/server_down.yml:ro
     ports:
       - 9898:9090
     restart: always
@@ -55,7 +55,7 @@ services:
     image: prom/alertmanager
     container_name: alertmanager
     volumes:
-      - ./prometheus/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+      - ./alertmanager.yml:/etc/alertmanager/alertmanager.yml
     ports:
       - 9093:9093
     restart: always
@@ -66,3 +66,7 @@ services:
     ports:
       - 3000:3000
     restart: always
+
+networks:
+  default:
+    driver: bridge

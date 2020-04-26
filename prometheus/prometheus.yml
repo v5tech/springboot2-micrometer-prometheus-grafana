@@ -50,6 +50,6 @@ scrape_configs:
     scrape_interval: 5s
     static_configs:
       # 应用服务器地址
-      - targets: ['172.24.202.120:8080']
+      - targets: ['172.24.202.75:8088']
         labels:
           instance: 'springboot2-micrometer-prometheus-grafana'

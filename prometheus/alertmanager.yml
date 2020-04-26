@@ -2,7 +2,7 @@ global:
   smtp_smarthost: 'smtp.exmail.qq.com:465'
   smtp_from: 'fengj@anchnet.com'
   smtp_auth_username: 'fengj@anchnet.com'
-  smtp_auth_password: 'xxxxx'
+  smtp_auth_password: '******'
   smtp_require_tls: false
 
 route:
